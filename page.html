@@ -3,135 +3,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>todo list</title>
-    <style>
-      body {
-        background-color: #ddd;
-      }
-      ul,li {
-          list-style: none;
-          margin: 0;
-          padding: 0;
-      }
-      #signInAndSignUp {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 300px;
-          padding: 10px;
-          border: 2px dotted #000;
-          border-radius: 5px;
-          background: #FFEBCD;
-          margin: 0 auto;
-      }
-      #signInAndSignUp .btn {
-          width: 100%;
-          font-size: 1.5em;
-          border: 1px solid #87CEEB;
-          border-radius: 5px;
-          background: #87CEEB;
-      }
-      #signInAndSignUp .msg {
-          display: inline-block;
-          width: 80px;
-          font-size: 1.2em;
-      }
-      #signInAndSignUp .formRow {
-          margin: 15px 0;
-      }
-      #signInAndSignUp .formRow input {
-          display: inline-block;
-          box-sizing: border-box;
-          width: 220px;
-          padding: 5px;
-          font-size: 1.2em;
-          border: 2px solid #DCDCDC;
-          border-radius: 5px;
-      }
-      #signInAndSignUp .formRow input:focus {
-          border: 2px solid #DB7093;
-          border-radius: 5px;
-          outline: none;
-      }
-      #todo {
-          width: 600px;
-          border: 2px solid #000;
-          border-radius: 5px;
-          background: #b9f8ff;
-          margin: 0 auto;
-      }
-      #todo input[type = text] {
-          display: block;
-          width: 80%;
-          height: 2em;
-          font-size: 1.5em;
-          margin: 20px auto;
-          border: 2px solid #0ff;
-          border-radius: 5px;
-      }
-      #todo .todo {
-          background: #f1efb7;
-          padding: 10px;
-          font-size: 1.4em;
-          border-bottom: 1px solid #000;
-      }
-      #todo input[type = checkbox] {
-          position: relative;
-          top: 3px;
-          width: 20px;
-          height: 20px;
-      }
-      #todo .done {
-          text-align: right;
-          font-size: 0.8em;
-          margin-top: 20px;
-      }
-      #todo .cancel {
-          border: 1px solid #000;
-          border-radius: 5px;
-          background: #e41616;
-          width: 30px;
-          height: 30px;
-          font-size: 1.2em;
-      }
-      #todo .user-name{
-          font-size: 1.6em;
-          margin-left: 20px;
-      }
-      #todo .btn {
-          float: right;
-          margin-right: 15px;
-          font-size: 24px;
-          border: 1px solid #87CEEB;
-          border-radius: 5px;
-          background: #f39a3d;
-      }
-      #todo input:focus {
-          border: 2px solid #DB7093;
-          border-radius: 5px;
-          outline: none;
-      }
-      .by{
-          font-size: 20px;
-          font-style: italic;
-          position: absolute;
-          bottom: 20px;
-          left: 50%;
-          transform: translateX(-50%);
-      }
-      .by a{
-          text-decoration: none;
-          color: #000;
-      }
-    </style>
+    <title>todolist</title>
   </head>
   <body>
     <div id="app">
       <section id="signInAndSignUp" v-if="!currentUser">
         <div>
           <label><input type="radio" name="type" v-model="actionType" value="signUp">注册</label>
-          <label><input type="radio" name="type" v-model="actionType" value="login">登入</label>
+          <label><input type="radio" name="type" v-model="actionType" value="login">登录</label>
         </div>
         <div class="signUp" v-if="actionType=='signUp'">
           <form @submit.prevent=signUp>
@@ -155,14 +34,14 @@
               <span class="msg">密码</span><input type="password" v-model="formData.password" placeholder="password">
             </div>
             <div class="formActions">
-              <input class="btn" type="submit" value="登入">
+              <input class="btn" type="submit" value="登录">
             </div>
           </form>
         </div>
       </section>
 
       <section id="todo" v-if="currentUser">
-        <p class="user-name">你好：{{currentUser.username}} <button class="btn" @click="logout">登出</button></p>
+        <p class="user-name">你好：{{currentUser.username}} <button class="btn" @click="logout">退出</button></p>
         <div class="newTask">
           <input type="text" v-model="newTodo" @keypress.enter="addTodo" placeholder="请输入待办事件">
         </div>

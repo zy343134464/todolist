@@ -255,25 +255,32 @@ process.umask = function() { return 0; };
 
 /***/ }),
 /* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_leancloud_storage__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_leancloud_storage___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_leancloud_storage__);
 
 
+var _vue = __webpack_require__(2);
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _leancloudStorage = __webpack_require__(4);
+
+var _leancloudStorage2 = _interopRequireDefault(_leancloudStorage);
+
+var _style = __webpack_require__(5);
+
+var _style2 = _interopRequireDefault(_style);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // 初始化leancloud
 var APP_ID = 'nsBo7ngv9qTYOJym4UOSp0cG-gzGzoHsz';
 var APP_KEY = 'Fs6LJQCC2oHL8jtEpkj2yoKe';
-__WEBPACK_IMPORTED_MODULE_1_leancloud_storage___default.a.init({
-  	appId: APP_ID,
-  	appKey: APP_KEY
+_leancloudStorage2.default.init({
+  appId: APP_ID,
+  appKey: APP_KEY
 });
-
 
 /*  验证leancloud后台数据
 var TestObject = AV.Object.extend('TestObject');
@@ -285,180 +292,193 @@ testObject.save({
 })
 */
 
-var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
-	el: '#app',
-	data: {
-		actionType: 'signUp',
-		formData: {
-	      	username: '',
-	      	password: ''
-	    },
-		newTodo: '',
-		todoList: [],
-		currentUser: null //判断用户是否登录
-	},
-	created: function(){
-	    window.onbeforeunload = ()=>{
-	      	var dataString = JSON.stringify(this.todoList) 
-/*			window.localStorage.setItem('myTodos', dataString)  //在用户关闭页面前，将数据保存在 localStorage 里*/
+var app = new _vue2.default({
+  el: '#app',
+  data: {
+    actionType: 'signUp',
+    formData: {
+      username: '',
+      password: ''
+    },
+    newTodo: '',
+    todoList: [],
+    currentUser: null //判断用户是否登录
+  },
+  created: function created() {
+    var _this = this;
 
-/*			// 将数据保存到leanclound
-			// onbeforeunload 事件里面的所有请求都发不出去，会被取消		
-			var AVTodos = AV.Object.extend('AllTodos');
-     		var avTodos = new AVTodos();
-      		avTodos.set('content', dataString);
-     		avTodos.save().then(function (todo) {
-       		// 成功保存之后，执行其他逻辑.
-         		console.log('保存成功');
-     		}, function (error) {
-       		// 异常处理
-        		console.error('保存失败');
-      		});
-      		debugger  // AllTodos 保存请求失败了，被 canceled*/
-	    }
+    window.onbeforeunload = function () {
+      var dataString = JSON.stringify(_this.todoList);
+      /*			window.localStorage.setItem('myTodos', dataString)  //在用户关闭页面前，将数据保存在 localStorage 里*/
 
-/*	    let oldDataString = window.localStorage.getItem('myTodos')
-	    let oldData = JSON.parse(oldDataString)
-	    this.todoList = oldData || [] // 在用户进入页面后，立刻读取 localStorage*/
+      /*			// 将数据保存到leanclound
+      			// onbeforeunload 事件里面的所有请求都发不出去，会被取消		
+      			var AVTodos = AV.Object.extend('AllTodos');
+           		var avTodos = new AVTodos();
+            		avTodos.set('content', dataString);
+           		avTodos.save().then(function (todo) {
+             		// 成功保存之后，执行其他逻辑.
+               		console.log('保存成功');
+           		}, function (error) {
+             		// 异常处理
+              		console.error('保存失败');
+            		});
+            		debugger  // AllTodos 保存请求失败了，被 canceled*/
+    };
 
-  		this.currentUser = this.getCurrentUser(); // //开始就要检查用户是否登陆
-/*  		// 重新读取 todo,批量操作API
-   		if(this.currentUser){
-     		var query = new AV.Query('AllTodos');
-     		query.find()
-   			// .then(function (todos) {
-      			// console.log(todos)
-      		.then((todos) => {
-	        	let avAllTodos = todos[0] // 理论上 AllTodos 只有一个，取结果的第一项
-	        	let id = avAllTodos.id
-	       		this.todoList = JSON.parse(avAllTodos.attributes.content) 
-	        	this.todoList.id = id //数组也是对象，可以设置属性id
-    		}, function(error){
-      			console.error(error) 
-    		})
-    	}*/
-    	this.fetchTodos() // 将重新读取todo代码封装函数 fetchTodos
+    /*	    let oldDataString = window.localStorage.getItem('myTodos')
+    	    let oldData = JSON.parse(oldDataString)
+    	    this.todoList = oldData || [] // 在用户进入页面后，立刻读取 localStorage*/
 
-  	},
-	methods: {
-		fetchTodos:function(){
-  		// 重新读取 todo,批量操作API
-	   		if(this.currentUser){
-	     		var query = new __WEBPACK_IMPORTED_MODULE_1_leancloud_storage___default.a.Query('AllTodos');
-	     		query.find()
-	   			// .then(function (todos) {
-	      			// console.log(todos)
-	      		.then((todos) => {
-		        	let avAllTodos = todos[0] // 理论上 AllTodos 只有一个，取结果的第一项
-		        	let id = avAllTodos.id
-		       		this.todoList = JSON.parse(avAllTodos.attributes.content) 
-		        	this.todoList.id = id //数组也是对象，可以设置属性id
-	    		}, function(error){
-	      			console.error(error) 
-	    		})
-	    	}
-		},
-		updateTodos:function(){
-            let dataString = JSON.stringify(this.todoList)
-            let avTodos = __WEBPACK_IMPORTED_MODULE_1_leancloud_storage___default.a.Object.createWithoutData('AllTodos', this.todoList.id)
-            avTodos.set('content', dataString)
-            avTodos.save().then(()=>{
-                console.log("更新成功");
-            })
-        },
-		saveTodos: function(){
-       		let dataString = JSON.stringify(this.todoList)
-       		var AVTodos = __WEBPACK_IMPORTED_MODULE_1_leancloud_storage___default.a.Object.extend('AllTodos');
-       		var avTodos = new AVTodos();
-       		// ACL模型,设置todo 存在用户名下,只有 todo 所属的用户能读写这些 todo
-       		var acl = new __WEBPACK_IMPORTED_MODULE_1_leancloud_storage___default.a.ACL()
- 		    acl.setReadAccess(__WEBPACK_IMPORTED_MODULE_1_leancloud_storage___default.a.User.current(),true) // 只有这个 user 能读
- 		    acl.setWriteAccess(__WEBPACK_IMPORTED_MODULE_1_leancloud_storage___default.a.User.current(),true) // 只有这个 user 能写
-       		avTodos.set('content', dataString);
-       		avTodos.setACL(acl) // 设置访问控制
-       		// avTodos.save().then(function (todo) {
-       		avTodos.save().then((todo) =>{
-				this.todoList.id = todo.id  // 把 id 挂到 this.todoList 上，否则下次就不会调用 updateTodos
-         		console.log('保存成功');
-       		}, function (error) {
-         		alert('保存失败');
-       		});
-     	},
-        saveOrUpdateTodos: function(){
-            if(this.todoList.id){
-                this.updateTodos()
-            }else {
-                this.saveTodos()
-            }
-        },
-		addTodo: function () {
-			if(!this.newTodo){ alert('请输入代办事项名称！'); return false;}
-      		var time = this.getNowFormatDate(Date.parse(new Date()));
-			this.todoList.push({
-				title: this.newTodo,
-				createdAt: time,
-				done: false // 添加一个done属性
-			})
-			this.newTodo = '' // 清空
-			// this.saveTodos() // 每次用户新增时候，就发送一个请求
-			this.saveOrUpdateTodos() // 不能用 saveTodos 了
-		},
-		removeTodo: function(todo){
-      		var index = this.todoList.indexOf(todo)
-      		this.todoList.splice(index,1)
-     	// this.saveTodos() // 每次用户删除 todo 的时候，就发送一个请求
-			this.saveOrUpdateTodos() // 不能用 saveTodos 了
-    	},
-    	signUp: function () {
-	      	var user = new __WEBPACK_IMPORTED_MODULE_1_leancloud_storage___default.a.User();
-	      	user.setUsername(this.formData.username);
-	      	user.setPassword(this.formData.password);
-	      	user.signUp().then((loginedUser) => {
-	        	this.currentUser = this.getCurrentUser()
-	      	},  (error) => {
-	      		alert('注册失败,用户名已经注册过')
-	      		console.log(error);
-	      	});
-	    },
-	    login: function () {
-	        __WEBPACK_IMPORTED_MODULE_1_leancloud_storage___default.a.User.logIn(this.formData.username, this.formData.password).then((loginedUser) => {
-	          	this.currentUser = this.getCurrentUser()
-	          	this.fetchTodos() // 登录成功后读取 todos
-	      	}, function (error) {
-	      		alert('登录失败,用户名或密码错误')
-	      		console.log(error);
-	      	});
-	    },
-		getCurrentUser: function(){
-            let current = __WEBPACK_IMPORTED_MODULE_1_leancloud_storage___default.a.User.current() //获取用户当前的状态
-            if(current){
-                let {id, createdAt, attributes: {username}} = current //如果当前用户登录,返回
-                return {id, username, createdAt}
-            }else{
-                return null //如果用户没登录,返回null
-            }
-        },
-        logout: function(){
-            __WEBPACK_IMPORTED_MODULE_1_leancloud_storage___default.a.User.logOut()
-            this.currentUser = null
-            window.location.reload()
-        },
-        getNowFormatDate: function(tsp){
-      		let time = new Date(tsp),
-	        year = time.getFullYear(),
-	        month = time.getMonth()+1,
-	        date = time.getDate(),
-	        hour = time.getHours(),
-	        minute = time.getMinutes(),
-	        second = time.getSeconds();
-      		month = month > 10 ? month : '0'+month;
-     		minute = minute > 9 ? minute : '0'+ minute;
-      		second = second > 9 ? second : '0'+ second; 
-      		return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
-    	}
-	}
-})   
+    this.currentUser = this.getCurrentUser(); // //开始就要检查用户是否登陆
+    /*  		// 重新读取 todo,批量操作API
+       		if(this.currentUser){
+         		var query = new AV.Query('AllTodos');
+         		query.find()
+       			// .then(function (todos) {
+          			// console.log(todos)
+          		.then((todos) => {
+    	        	let avAllTodos = todos[0] // 理论上 AllTodos 只有一个，取结果的第一项
+    	        	let id = avAllTodos.id
+    	       		this.todoList = JSON.parse(avAllTodos.attributes.content) 
+    	        	this.todoList.id = id //数组也是对象，可以设置属性id
+        		}, function(error){
+          			console.error(error) 
+        		})
+        	}*/
+    this.fetchTodos(); // 将重新读取todo代码封装函数 fetchTodos
+  },
+  methods: {
+    fetchTodos: function fetchTodos() {
+      var _this2 = this;
 
+      // 重新读取 todo,批量操作API
+      if (this.currentUser) {
+        var query = new _leancloudStorage2.default.Query('AllTodos');
+        query.find()
+        // .then(function (todos) {
+        // console.log(todos)
+        .then(function (todos) {
+          var avAllTodos = todos[0]; // 理论上 AllTodos 只有一个，取结果的第一项
+          var id = avAllTodos.id;
+          _this2.todoList = JSON.parse(avAllTodos.attributes.content);
+          _this2.todoList.id = id; //数组也是对象，可以设置属性id
+        }, function (error) {
+          console.error(error);
+        });
+      }
+    },
+    updateTodos: function updateTodos() {
+      var dataString = JSON.stringify(this.todoList);
+      var avTodos = _leancloudStorage2.default.Object.createWithoutData('AllTodos', this.todoList.id);
+      avTodos.set('content', dataString);
+      avTodos.save().then(function () {
+        console.log("更新成功");
+      });
+    },
+    saveTodos: function saveTodos() {
+      var _this3 = this;
+
+      var dataString = JSON.stringify(this.todoList);
+      var AVTodos = _leancloudStorage2.default.Object.extend('AllTodos');
+      var avTodos = new AVTodos();
+      // ACL模型,设置todo 存在用户名下,只有 todo 所属的用户能读写这些 todo
+      var acl = new _leancloudStorage2.default.ACL();
+      acl.setReadAccess(_leancloudStorage2.default.User.current(), true); // 只有这个 user 能读
+      acl.setWriteAccess(_leancloudStorage2.default.User.current(), true); // 只有这个 user 能写
+      avTodos.set('content', dataString);
+      avTodos.setACL(acl); // 设置访问控制
+      // avTodos.save().then(function (todo) {
+      avTodos.save().then(function (todo) {
+        _this3.todoList.id = todo.id; // 把 id 挂到 this.todoList 上，否则下次就不会调用 updateTodos
+        console.log('保存成功');
+      }, function (error) {
+        alert('保存失败');
+      });
+    },
+    saveOrUpdateTodos: function saveOrUpdateTodos() {
+      if (this.todoList.id) {
+        this.updateTodos();
+      } else {
+        this.saveTodos();
+      }
+    },
+    addTodo: function addTodo() {
+      if (!this.newTodo) {
+        alert('请输入代办事项！');return false;
+      }
+      var time = this.getNowFormatDate(Date.parse(new Date()));
+      this.todoList.push({
+        title: this.newTodo,
+        createdAt: time,
+        done: false // 添加一个done属性
+      });
+      this.newTodo = ''; // 清空
+      // this.saveTodos() // 每次用户新增时候，就发送一个请求
+      this.saveOrUpdateTodos(); // 不能用 saveTodos 了
+    },
+    removeTodo: function removeTodo(todo) {
+      var index = this.todoList.indexOf(todo);
+      this.todoList.splice(index, 1);
+      // this.saveTodos() // 每次用户删除 todo 的时候，就发送一个请求
+      this.saveOrUpdateTodos(); // 不能用 saveTodos 了
+    },
+    signUp: function signUp() {
+      var _this4 = this;
+
+      var user = new _leancloudStorage2.default.User();
+      user.setUsername(this.formData.username);
+      user.setPassword(this.formData.password);
+      user.signUp().then(function (loginedUser) {
+        _this4.currentUser = _this4.getCurrentUser();
+      }, function (error) {
+        alert('注册失败,用户名已经注册过');
+        console.log(error);
+      });
+    },
+    login: function login() {
+      var _this5 = this;
+
+      _leancloudStorage2.default.User.logIn(this.formData.username, this.formData.password).then(function (loginedUser) {
+        _this5.currentUser = _this5.getCurrentUser();
+        _this5.fetchTodos(); // 登录成功后读取 todos
+      }, function (error) {
+        alert('登录失败,用户名或密码错误');
+        console.log(error);
+      });
+    },
+    getCurrentUser: function getCurrentUser() {
+      var current = _leancloudStorage2.default.User.current(); //获取用户当前的状态
+      if (current) {
+        var id = current.id,
+            createdAt = current.createdAt,
+            username = current.attributes.username; //如果当前用户登录,返回
+
+        return { id: id, username: username, createdAt: createdAt };
+      } else {
+        return null; //如果用户没登录,返回null
+      }
+    },
+    logout: function logout() {
+      _leancloudStorage2.default.User.logOut();
+      this.currentUser = null;
+      window.location.reload();
+    },
+    getNowFormatDate: function getNowFormatDate(tsp) {
+      var time = new Date(tsp),
+          year = time.getFullYear(),
+          month = time.getMonth() + 1,
+          date = time.getDate(),
+          hour = time.getHours(),
+          minute = time.getMinutes(),
+          second = time.getSeconds();
+      month = month > 10 ? month : '0' + month;
+      minute = minute > 9 ? minute : '0' + minute;
+      second = second > 9 ? second : '0' + second;
+      return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
+    }
+  }
+});
 
 /***/ }),
 /* 2 */
@@ -10609,6 +10629,587 @@ n(26);var r=n(5);r._=n(0),r.version=n(12),r.Promise=n(1),r.localStorage=n(11),r.
 t.exports=function(t){return null!=t&&(n(t)||r(t)||!!t._isBuffer)}},function(t,e,n){!function(e){var n={},r={};n.length=0,n.getItem=function(t){return r[t]||null},n.setItem=function(t,e){void 0===e?n.removeItem(t):(r.hasOwnProperty(t)||n.length++,r[t]=""+e)},n.removeItem=function(t){r.hasOwnProperty(t)&&(delete r[t],n.length--)},n.key=function(t){return Object.keys(r)[t]||null},n.clear=function(){r={},n.length=0},t.exports=n}()},function(t,e,n){!function(){var e=n(44),r=n(13).utf8,i=n(48),s=n(13).bin,o=function(t,n){t.constructor==String?t=n&&"binary"===n.encoding?s.stringToBytes(t):r.stringToBytes(t):i(t)?t=Array.prototype.slice.call(t,0):Array.isArray(t)||(t=t.toString());for(var a=e.bytesToWords(t),u=8*t.length,c=1732584193,l=-271733879,h=-1732584194,f=271733878,d=0;d<a.length;d++)a[d]=16711935&(a[d]<<8|a[d]>>>24)|4278255360&(a[d]<<24|a[d]>>>8);a[u>>>5]|=128<<u%32,a[14+(u+64>>>9<<4)]=u;for(var p=o._ff,_=o._gg,v=o._hh,m=o._ii,d=0;d<a.length;d+=16){var y=c,g=l,b=h,w=f;c=p(c,l,h,f,a[d+0],7,-680876936),f=p(f,c,l,h,a[d+1],12,-389564586),h=p(h,f,c,l,a[d+2],17,606105819),l=p(l,h,f,c,a[d+3],22,-1044525330),c=p(c,l,h,f,a[d+4],7,-176418897),f=p(f,c,l,h,a[d+5],12,1200080426),h=p(h,f,c,l,a[d+6],17,-1473231341),l=p(l,h,f,c,a[d+7],22,-45705983),c=p(c,l,h,f,a[d+8],7,1770035416),f=p(f,c,l,h,a[d+9],12,-1958414417),h=p(h,f,c,l,a[d+10],17,-42063),l=p(l,h,f,c,a[d+11],22,-1990404162),c=p(c,l,h,f,a[d+12],7,1804603682),f=p(f,c,l,h,a[d+13],12,-40341101),h=p(h,f,c,l,a[d+14],17,-1502002290),l=p(l,h,f,c,a[d+15],22,1236535329),c=_(c,l,h,f,a[d+1],5,-165796510),f=_(f,c,l,h,a[d+6],9,-1069501632),h=_(h,f,c,l,a[d+11],14,643717713),l=_(l,h,f,c,a[d+0],20,-373897302),c=_(c,l,h,f,a[d+5],5,-701558691),f=_(f,c,l,h,a[d+10],9,38016083),h=_(h,f,c,l,a[d+15],14,-660478335),l=_(l,h,f,c,a[d+4],20,-405537848),c=_(c,l,h,f,a[d+9],5,568446438),f=_(f,c,l,h,a[d+14],9,-1019803690),h=_(h,f,c,l,a[d+3],14,-187363961),l=_(l,h,f,c,a[d+8],20,1163531501),c=_(c,l,h,f,a[d+13],5,-1444681467),f=_(f,c,l,h,a[d+2],9,-51403784),h=_(h,f,c,l,a[d+7],14,1735328473),l=_(l,h,f,c,a[d+12],20,-1926607734),c=v(c,l,h,f,a[d+5],4,-378558),f=v(f,c,l,h,a[d+8],11,-2022574463),h=v(h,f,c,l,a[d+11],16,1839030562),l=v(l,h,f,c,a[d+14],23,-35309556),c=v(c,l,h,f,a[d+1],4,-1530992060),f=v(f,c,l,h,a[d+4],11,1272893353),h=v(h,f,c,l,a[d+7],16,-155497632),l=v(l,h,f,c,a[d+10],23,-1094730640),c=v(c,l,h,f,a[d+13],4,681279174),f=v(f,c,l,h,a[d+0],11,-358537222),h=v(h,f,c,l,a[d+3],16,-722521979),l=v(l,h,f,c,a[d+6],23,76029189),c=v(c,l,h,f,a[d+9],4,-640364487),f=v(f,c,l,h,a[d+12],11,-421815835),h=v(h,f,c,l,a[d+15],16,530742520),l=v(l,h,f,c,a[d+2],23,-995338651),c=m(c,l,h,f,a[d+0],6,-198630844),f=m(f,c,l,h,a[d+7],10,1126891415),h=m(h,f,c,l,a[d+14],15,-1416354905),l=m(l,h,f,c,a[d+5],21,-57434055),c=m(c,l,h,f,a[d+12],6,1700485571),f=m(f,c,l,h,a[d+3],10,-1894986606),h=m(h,f,c,l,a[d+10],15,-1051523),l=m(l,h,f,c,a[d+1],21,-2054922799),c=m(c,l,h,f,a[d+8],6,1873313359),f=m(f,c,l,h,a[d+15],10,-30611744),h=m(h,f,c,l,a[d+6],15,-1560198380),l=m(l,h,f,c,a[d+13],21,1309151649),c=m(c,l,h,f,a[d+4],6,-145523070),f=m(f,c,l,h,a[d+11],10,-1120210379),h=m(h,f,c,l,a[d+2],15,718787259),l=m(l,h,f,c,a[d+9],21,-343485551),c=c+y>>>0,l=l+g>>>0,h=h+b>>>0,f=f+w>>>0}return e.endian([c,l,h,f])};o._ff=function(t,e,n,r,i,s,o){var a=t+(e&n|~e&r)+(i>>>0)+o;return(a<<s|a>>>32-s)+e},o._gg=function(t,e,n,r,i,s,o){var a=t+(e&r|n&~r)+(i>>>0)+o;return(a<<s|a>>>32-s)+e},o._hh=function(t,e,n,r,i,s,o){var a=t+(e^n^r)+(i>>>0)+o;return(a<<s|a>>>32-s)+e},o._ii=function(t,e,n,r,i,s,o){var a=t+(n^(e|~r))+(i>>>0)+o;return(a<<s|a>>>32-s)+e},o._blocksize=16,o._digestsize=16,t.exports=function(t,n){if(void 0===t||null===t)throw new Error("Illegal argument "+t);var r=e.wordsToBytes(o(t,n));return n&&n.asBytes?r:n&&n.asString?s.bytesToString(r):e.bytesToHex(r)}}()},function(t,e){function n(t){if(t=String(t),!(t.length>100)){var e=/^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(t);if(e){var n=parseFloat(e[1]);switch((e[2]||"ms").toLowerCase()){case"years":case"year":case"yrs":case"yr":case"y":return n*l;case"days":case"day":case"d":return n*c;case"hours":case"hour":case"hrs":case"hr":case"h":return n*u;case"minutes":case"minute":case"mins":case"min":case"m":return n*a;case"seconds":case"second":case"secs":case"sec":case"s":return n*o;case"milliseconds":case"millisecond":case"msecs":case"msec":case"ms":return n;default:return}}}}function r(t){return t>=c?Math.round(t/c)+"d":t>=u?Math.round(t/u)+"h":t>=a?Math.round(t/a)+"m":t>=o?Math.round(t/o)+"s":t+"ms"}function i(t){return s(t,c,"day")||s(t,u,"hour")||s(t,a,"minute")||s(t,o,"second")||t+" ms"}function s(t,e,n){if(!(t<e))return t<1.5*e?Math.floor(t/e)+" "+n:Math.ceil(t/e)+" "+n+"s"}var o=1e3,a=60*o,u=60*a,c=24*u,l=365.25*c;t.exports=function(t,e){e=e||{};var s=typeof t;if("string"===s&&t.length>0)return n(t);if("number"===s&&!1===isNaN(t))return e.long?i(t):r(t);throw new Error("val is not a non-empty string or a valid number. val="+JSON.stringify(t))}},function(t,e,n){function r(t){return"[object Function]"===(i(t)?Object.prototype.toString.call(t):"")}var i=n(8);t.exports=r},function(t,e,n){function r(t){if(t)return i(t)}function i(t){for(var e in r.prototype)t[e]=r.prototype[e];return t}var s=n(8);t.exports=r,r.prototype.clearTimeout=function(){return clearTimeout(this._timer),clearTimeout(this._responseTimeoutTimer),delete this._timer,delete this._responseTimeoutTimer,this},r.prototype.parse=function(t){return this._parser=t,this},r.prototype.responseType=function(t){return this._responseType=t,this},r.prototype.serialize=function(t){return this._serializer=t,this},r.prototype.timeout=function(t){if(!t||"object"!=typeof t)return this._timeout=t,this._responseTimeout=0,this;for(var e in t)switch(e){case"deadline":this._timeout=t.deadline;break;case"response":this._responseTimeout=t.response;break;default:console.warn("Unknown timeout option",e)}return this},r.prototype.retry=function(t){return 0!==arguments.length&&!0!==t||(t=1),t<=0&&(t=0),this._maxRetries=t,this._retries=0,this},r.prototype._retry=function(){return this.clearTimeout(),this.req&&(this.req=null,this.req=this.request()),this._aborted=!1,this.timedout=!1,this._end()},r.prototype.then=function(t,e){if(!this._fullfilledPromise){var n=this;this._endCalled&&console.warn("Warning: superagent request was sent twice, because both .end() and .then() were called. Never call .end() if you use promises"),this._fullfilledPromise=new Promise(function(t,e){n.end(function(n,r){n?e(n):t(r)})})}return this._fullfilledPromise.then(t,e)},r.prototype.catch=function(t){return this.then(void 0,t)},r.prototype.use=function(t){return t(this),this},r.prototype.ok=function(t){if("function"!=typeof t)throw Error("Callback required");return this._okCallback=t,this},r.prototype._isResponseOK=function(t){return!!t&&(this._okCallback?this._okCallback(t):t.status>=200&&t.status<300)},r.prototype.get=function(t){return this._header[t.toLowerCase()]},r.prototype.getHeader=r.prototype.get,r.prototype.set=function(t,e){if(s(t)){for(var n in t)this.set(n,t[n]);return this}return this._header[t.toLowerCase()]=e,this.header[t]=e,this},r.prototype.unset=function(t){return delete this._header[t.toLowerCase()],delete this.header[t],this},r.prototype.field=function(t,e){if(null===t||void 0===t)throw new Error(".field(name, val) name can not be empty");if(this._data&&console.error(".field() can't be used if .send() is used. Please use only .send() or only .field() & .attach()"),s(t)){for(var n in t)this.field(n,t[n]);return this}if(Array.isArray(e)){for(var r in e)this.field(t,e[r]);return this}if(null===e||void 0===e)throw new Error(".field(name, val) val can not be empty");return"boolean"==typeof e&&(e=""+e),this._getFormData().append(t,e),this},r.prototype.abort=function(){return this._aborted?this:(this._aborted=!0,this.xhr&&this.xhr.abort(),this.req&&this.req.abort(),this.clearTimeout(),this.emit("abort"),this)},r.prototype.withCredentials=function(t){return void 0==t&&(t=!0),this._withCredentials=t,this},r.prototype.redirects=function(t){return this._maxRedirects=t,this},r.prototype.toJSON=function(){return{method:this.method,url:this.url,data:this._data,headers:this._header}},r.prototype.send=function(t){var e=s(t),n=this._header["content-type"];if(this._formData&&console.error(".send() can't be used if .attach() or .field() is used. Please use only .send() or only .field() & .attach()"),e&&!this._data)Array.isArray(t)?this._data=[]:this._isHost(t)||(this._data={});else if(t&&this._data&&this._isHost(this._data))throw Error("Can't merge these send calls");if(e&&s(this._data))for(var r in t)this._data[r]=t[r];else"string"==typeof t?(n||this.type("form"),n=this._header["content-type"],this._data="application/x-www-form-urlencoded"==n?this._data?this._data+"&"+t:t:(this._data||"")+t):this._data=t;return!e||this._isHost(t)?this:(n||this.type("json"),this)},r.prototype.sortQuery=function(t){return this._sort=void 0===t||t,this},r.prototype._timeoutError=function(t,e,n){if(!this._aborted){var r=new Error(t+e+"ms exceeded");r.timeout=e,r.code="ECONNABORTED",r.errno=n,this.timedout=!0,this.abort(),this.callback(r)}},r.prototype._setTimeouts=function(){var t=this;this._timeout&&!this._timer&&(this._timer=setTimeout(function(){t._timeoutError("Timeout of ",t._timeout,"ETIME")},this._timeout)),this._responseTimeout&&!this._responseTimeoutTimer&&(this._responseTimeoutTimer=setTimeout(function(){t._timeoutError("Response timeout of ",t._responseTimeout,"ETIMEDOUT")},this._responseTimeout))}},function(t,e,n){function r(t){if(t)return i(t)}function i(t){for(var e in r.prototype)t[e]=r.prototype[e];return t}var s=n(56);t.exports=r,r.prototype.get=function(t){return this.header[t.toLowerCase()]},r.prototype._setHeaderProperties=function(t){var e=t["content-type"]||"";this.type=s.type(e);var n=s.params(e);for(var r in n)this[r]=n[r];this.links={};try{t.link&&(this.links=s.parseLinks(t.link))}catch(t){}},r.prototype._setStatusProperties=function(t){var e=t/100|0;this.status=this.statusCode=t,this.statusType=e,this.info=1==e,this.ok=2==e,this.redirect=3==e,this.clientError=4==e,this.serverError=5==e,this.error=(4==e||5==e)&&this.toError(),this.accepted=202==t,this.noContent=204==t,this.badRequest=400==t,this.unauthorized=401==t,this.notAcceptable=406==t,this.forbidden=403==t,this.notFound=404==t}},function(t,e){var n=["ECONNRESET","ETIMEDOUT","EADDRINFO","ESOCKETTIMEDOUT"];t.exports=function(t,e){return!!(t&&t.code&&~n.indexOf(t.code))||(!!(e&&e.status&&e.status>=500)||(!!(t&&"timeout"in t&&"ECONNABORTED"==t.code)||!!(t&&"crossDomain"in t)))}},function(t,e){e.type=function(t){return t.split(/ *; */).shift()},e.params=function(t){return t.split(/ *; */).reduce(function(t,e){var n=e.split(/ *= */),r=n.shift(),i=n.shift();return r&&i&&(t[r]=i),t},{})},e.parseLinks=function(t){return t.split(/ *, */).reduce(function(t,e){var n=e.split(/ *; */),r=n[0].slice(1,-1);return t[n[1].split(/ *= */)[1].slice(1,-1)]=r,t},{})},e.cleanHeader=function(t,e){return delete t["content-type"],delete t["content-length"],delete t["transfer-encoding"],delete t.host,e&&delete t.cookie,t}},function(t,e){}])});
 //# sourceMappingURL=av-min.js.map
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(6);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(8)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!./node_modules/css-loader/index.js!./style.css", function() {
+			var newContent = require("!!./node_modules/css-loader/index.js!./style.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(7)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "      body {\r\n        background-color: #ddd;\r\n      }\r\n      ul,li {\r\n          list-style: none;\r\n          margin: 0;\r\n          padding: 0;\r\n      }\r\n      #signInAndSignUp {\r\n          position: absolute;\r\n          top: 50%;\r\n          left: 50%;\r\n          transform: translate(-50%, -50%);\r\n          width: 300px;\r\n          padding: 10px;\r\n          border: 2px dotted #000;\r\n          border-radius: 5px;\r\n          background: #FFEBCD;\r\n          margin: 0 auto;\r\n      }\r\n      #signInAndSignUp .btn {\r\n          width: 100%;\r\n          font-size: 1.5em;\r\n          border: 1px solid #87CEEB;\r\n          border-radius: 5px;\r\n          background: #4fbfd9;\r\n          color: #fff;\r\n      }\r\n      #signInAndSignUp .msg {\r\n          display: inline-block;\r\n          width: 80px;\r\n          font-size: 1.2em;\r\n      }\r\n      #signInAndSignUp .formRow {\r\n          margin: 15px 0;\r\n      }\r\n      #signInAndSignUp .formRow input {\r\n          display: inline-block;\r\n          box-sizing: border-box;\r\n          width: 220px;\r\n          padding: 5px;\r\n          font-size: 1.2em;\r\n          border: 2px solid #DCDCDC;\r\n          border-radius: 5px;\r\n      }\r\n      #signInAndSignUp .formRow input:focus {\r\n          border: 2px solid #DB7093;\r\n          border-radius: 5px;\r\n          outline: none;\r\n      }\r\n      #todo {\r\n          width: 600px;\r\n          border: 2px solid #000;\r\n          border-radius: 5px;\r\n          background: #5CC853;\r\n          margin: 0 auto;\r\n      }\r\n      #todo input[type = text] {\r\n          display: block;\r\n          width: 80%;\r\n          height: 2em;\r\n          font-size: 1.5em;\r\n          margin: 20px auto;\r\n          border: 2px solid #0ff;\r\n          border-radius: 5px;\r\n      }\r\n      #todo .todo {\r\n          background: #fff;\r\n          padding: 10px;\r\n          font-size: 1.4em;\r\n          border-bottom: 1px solid #000;\r\n      }\r\n      #todo input[type = checkbox] {\r\n          position: relative;\r\n          top: 3px;\r\n          width: 20px;\r\n          height: 20px;\r\n      }\r\n      #todo .done {\r\n          text-align: right;\r\n          font-size: 0.8em;\r\n          margin-top: 20px;\r\n      }\r\n      #todo .cancel {\r\n          border: 1px solid #000;\r\n          border-radius: 5px;\r\n          background: #FDD048;\r\n          width: 30px;\r\n          height: 30px;\r\n          font-size: 1.2em;\r\n      }\r\n      #todo .user-name{\r\n          font-size: 1.6em;\r\n          margin-left: 20px;\r\n          color: #fff;\r\n      }\r\n      #todo .btn {\r\n          float: right;\r\n          margin-right: 15px;\r\n          font-size: 24px;\r\n          border: 1px solid #f33d3d;\r\n          border-radius: 5px;\r\n          background: #f33d3d;\r\n          color: #fff;\r\n      }\r\n      #todo input:focus {\r\n          border: 2px solid #DB7093;\r\n          border-radius: 5px;\r\n          outline: none;\r\n      }\r\n      .by{\r\n          font-size: 20px;\r\n          font-style: italic;\r\n          position: absolute;\r\n          bottom: 20px;\r\n          left: 50%;\r\n          transform: translateX(-50%);\r\n      }\r\n      .by a{\r\n          text-decoration: none;\r\n          color: #000;\r\n      }", ""]);
+
+// exports
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+
+var stylesInDom = {};
+
+var	memoize = function (fn) {
+	var memo;
+
+	return function () {
+		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+		return memo;
+	};
+};
+
+var isOldIE = memoize(function () {
+	// Test for IE <= 9 as proposed by Browserhacks
+	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+	// Tests for existence of standard globals is to allow style-loader
+	// to operate correctly into non-standard environments
+	// @see https://github.com/webpack-contrib/style-loader/issues/177
+	return window && document && document.all && !window.atob;
+});
+
+var getElement = (function (fn) {
+	var memo = {};
+
+	return function(selector) {
+		if (typeof memo[selector] === "undefined") {
+			memo[selector] = fn.call(this, selector);
+		}
+
+		return memo[selector]
+	};
+})(function (target) {
+	return document.querySelector(target)
+});
+
+var singleton = null;
+var	singletonCounter = 0;
+var	stylesInsertedAtTop = [];
+
+var	fixUrls = __webpack_require__(9);
+
+module.exports = function(list, options) {
+	if (typeof DEBUG !== "undefined" && DEBUG) {
+		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+
+	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
+
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (!options.singleton) options.singleton = isOldIE();
+
+	// By default, add <style> tags to the <head> element
+	if (!options.insertInto) options.insertInto = "head";
+
+	// By default, add <style> tags to the bottom of the target
+	if (!options.insertAt) options.insertAt = "bottom";
+
+	var styles = listToStyles(list, options);
+
+	addStylesToDom(styles, options);
+
+	return function update (newList) {
+		var mayRemove = [];
+
+		for (var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+
+		if(newList) {
+			var newStyles = listToStyles(newList, options);
+			addStylesToDom(newStyles, options);
+		}
+
+		for (var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+
+			if(domStyle.refs === 0) {
+				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
+
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+};
+
+function addStylesToDom (styles, options) {
+	for (var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+
+		if(domStyle) {
+			domStyle.refs++;
+
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles (list, options) {
+	var styles = [];
+	var newStyles = {};
+
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = options.base ? item[0] + options.base : item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+
+		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
+		else newStyles[id].parts.push(part);
+	}
+
+	return styles;
+}
+
+function insertStyleElement (options, style) {
+	var target = getElement(options.insertInto)
+
+	if (!target) {
+		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
+	}
+
+	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
+
+	if (options.insertAt === "top") {
+		if (!lastStyleElementInsertedAtTop) {
+			target.insertBefore(style, target.firstChild);
+		} else if (lastStyleElementInsertedAtTop.nextSibling) {
+			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			target.appendChild(style);
+		}
+		stylesInsertedAtTop.push(style);
+	} else if (options.insertAt === "bottom") {
+		target.appendChild(style);
+	} else {
+		throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+	}
+}
+
+function removeStyleElement (style) {
+	if (style.parentNode === null) return false;
+	style.parentNode.removeChild(style);
+
+	var idx = stylesInsertedAtTop.indexOf(style);
+	if(idx >= 0) {
+		stylesInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement (options) {
+	var style = document.createElement("style");
+
+	options.attrs.type = "text/css";
+
+	addAttrs(style, options.attrs);
+	insertStyleElement(options, style);
+
+	return style;
+}
+
+function createLinkElement (options) {
+	var link = document.createElement("link");
+
+	options.attrs.type = "text/css";
+	options.attrs.rel = "stylesheet";
+
+	addAttrs(link, options.attrs);
+	insertStyleElement(options, link);
+
+	return link;
+}
+
+function addAttrs (el, attrs) {
+	Object.keys(attrs).forEach(function (key) {
+		el.setAttribute(key, attrs[key]);
+	});
+}
+
+function addStyle (obj, options) {
+	var style, update, remove, result;
+
+	// If a transform function was defined, run it on the css
+	if (options.transform && obj.css) {
+	    result = options.transform(obj.css);
+
+	    if (result) {
+	    	// If transform returns a value, use that instead of the original css.
+	    	// This allows running runtime transformations on the css.
+	    	obj.css = result;
+	    } else {
+	    	// If the transform function returns a falsy value, don't add this css.
+	    	// This allows conditional loading of css
+	    	return function() {
+	    		// noop
+	    	};
+	    }
+	}
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+
+		style = singleton || (singleton = createStyleElement(options));
+
+		update = applyToSingletonTag.bind(null, style, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+
+	} else if (
+		obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function"
+	) {
+		style = createLinkElement(options);
+		update = updateLink.bind(null, style, options);
+		remove = function () {
+			removeStyleElement(style);
+
+			if(style.href) URL.revokeObjectURL(style.href);
+		};
+	} else {
+		style = createStyleElement(options);
+		update = applyToTag.bind(null, style);
+		remove = function () {
+			removeStyleElement(style);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle (newObj) {
+		if (newObj) {
+			if (
+				newObj.css === obj.css &&
+				newObj.media === obj.media &&
+				newObj.sourceMap === obj.sourceMap
+			) {
+				return;
+			}
+
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag (style, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (style.styleSheet) {
+		style.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = style.childNodes;
+
+		if (childNodes[index]) style.removeChild(childNodes[index]);
+
+		if (childNodes.length) {
+			style.insertBefore(cssNode, childNodes[index]);
+		} else {
+			style.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag (style, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		style.setAttribute("media", media)
+	}
+
+	if(style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		while(style.firstChild) {
+			style.removeChild(style.firstChild);
+		}
+
+		style.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink (link, options, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	/*
+		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
+		and there is no publicPath defined then lets turn convertToAbsoluteUrls
+		on by default.  Otherwise default to the convertToAbsoluteUrls option
+		directly
+	*/
+	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
+
+	if (options.convertToAbsoluteUrls || autoFixUrls) {
+		css = fixUrls(css);
+	}
+
+	if (sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = link.href;
+
+	link.href = URL.createObjectURL(blob);
+
+	if(oldSrc) URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
+
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
+
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
+
+	// blank or null?
+	if (!css || typeof css !== "string") {
+	  return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+
+	// convert each url(...)
+	/*
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
+              *\) = Match anything and then a close parens
+          )  = Close non-capturing group
+          *  = Match anything
+       )  = Close capturing group
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+		// strip quotes (if they exist)
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+
+		// already a full url? no change
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
+		  return fullMatch;
+		}
+
+		// convert the url to a full url
+		var newUrl;
+
+		if (unquotedOrigUrl.indexOf("//") === 0) {
+		  	//TODO: should we add protocol?
+			newUrl = unquotedOrigUrl;
+		} else if (unquotedOrigUrl.indexOf("/") === 0) {
+			// path should be relative to the base url
+			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+		} else {
+			// path should be relative to current directory
+			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+		}
+
+		// send back the fixed url(...)
+		return "url(" + JSON.stringify(newUrl) + ")";
+	});
+
+	// send back the fixed css
+	return fixedCss;
+};
+
 
 /***/ })
 /******/ ]);

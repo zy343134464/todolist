@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import AV from 'leancloud-storage'
+import style from './style.css'
 
 // 初始化leancloud
 var APP_ID = 'nsBo7ngv9qTYOJym4UOSp0cG-gzGzoHsz';
@@ -127,7 +128,7 @@ var app = new Vue({
             }
         },
 		addTodo: function () {
-			if(!this.newTodo){ alert('请输入代办事项名称！'); return false;}
+			if(!this.newTodo){ alert('请输入代办事项！'); return false;}
       		var time = this.getNowFormatDate(Date.parse(new Date()));
 			this.todoList.push({
 				title: this.newTodo,
