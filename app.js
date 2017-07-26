@@ -30,7 +30,7 @@ var app = new Vue({
 	    },
 		newTodo: '',
 		todoList: [],
-		currentUser: null
+		currentUser: null //判断用户是否登录
 	},
 	created: function(){
 	    window.onbeforeunload = ()=>{
@@ -56,7 +56,7 @@ var app = new Vue({
 	    let oldData = JSON.parse(oldDataString)
 	    this.todoList = oldData || [] // 在用户进入页面后，立刻读取 localStorage*/
 
-  		this.currentUser = this.getCurrentUser(); // //检查用户是否登陆
+  		this.currentUser = this.getCurrentUser(); // //开始就要检查用户是否登陆
 /*  		// 重新读取 todo,批量操作API
    		if(this.currentUser){
      		var query = new AV.Query('AllTodos');
@@ -167,10 +167,10 @@ var app = new Vue({
 		getCurrentUser: function(){
             let current = AV.User.current() //获取用户当前的状态
             if(current){
-                let {id, createdAt, attributes: {username}} = current
+                let {id, createdAt, attributes: {username}} = current //如果当前用户登录,返回
                 return {id, username, createdAt}
             }else{
-                return null
+                return null //如果用户没登录,返回null
             }
         },
         logout: function(){
