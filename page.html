@@ -1,20 +1,111 @@
 <html>
   <head>
-    <meta charset=utf-8>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>todo list</title>
+    <style>
+      ul,li {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+      }
+      #app {
+          width: 600px;
+          border: 2px solid #000;
+          border-radius: 5px;
+          background: #ffdab9;
+          margin: 0 auto;
+      }
+      #app input[type = text] {
+          display: block;
+          width: 80%;
+          height: 2em;
+          font-size: 1.5em;
+          margin: 20px auto;
+          border: 2px solid #0ff;
+          border-radius: 5px;
+      }
+      #app .todo {
+          background: #ccc;
+          padding: 10px;
+          font-size: 1.4em;
+          border-bottom: 1px solid #000;
+      }
+      #app input[type = checkbox] {
+          position: relative;
+          top: 3px;
+          width: 20px;
+          height: 20px;
+      }
+      #app .done {
+          text-align: right;
+          font-size: 0.8em;
+          margin-top: 20px;
+      }
+      #app .cancel {
+          border: 1px solid #000;
+          border-radius: 5px;
+          background: #0ff;
+          width: 30px;
+          height: 30px;
+          font-size: 1.2em;
+      }
+    </style>
   </head>
   <body>
     <div id="app">
-      <div class="newTask">
-        <input type="text" v-model="newTodo" @keypress.enter="addTodo">
-      </div>
-      <ol class="todos">
-      	<li v-for="todo in todoList">
-      		<input type="checkbox"  v-model="todo.done">{{ todo.title }}
-      		<span v-if="todo.done">已完成</span>
-      		<span v-else>未完成</span>
-      		<button @click="removeTodo(todo)">X</button>  <!-- 删除按钮 -->
-      	</li>
-      </ol>
+      <section id="signInAndSignUp" v-if="!currentUser">
+        <div>
+          <label><input type="radio" name="type" v-model="actionType" value="signUp">注册</label>
+          <label><input type="radio" name="type" v-model="actionType" value="login">登入</label>
+        </div>
+        <div class="signUp" v-if="actionType=='signUp'">
+          <form @submit.prevent=signUp>
+            <div class="formRow">
+              用户名<input type="text" v-model="formData.username">
+            </div>
+            <div class="formRow">
+              密码<input type="password" v-model="formData.password">
+            </div>
+            <div class="formActions">
+              <input type="submit" value="注册">
+            </div>
+          </form>
+        </div>
+        <div class="login" v-if="actionType=='login'">
+          <form @submit.prevent="login">
+            <div class="formRow">
+              用户名<input type="text" v-model="formData.username">
+            </div>
+            <div class="formRow">
+              密码<input type="password" v-model="formData.password">
+            </div>
+            <div class="formActions">
+              <input type="submit" value="登入">
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="todo" v-if="currentUser">
+        <p><button @click="logout">登出</button></p>
+        <div class="newTask">
+          <input type="text" v-model="newTodo" @keypress.enter="addTodo" placeholder="请输入待办事件">
+        </div>
+        <ul>
+          <li class="todo" v-for="todo in todoList">
+            <input class="todotitle" type="checkbox"  v-model="todo.done">{{ todo.title }}
+            <div class="done">
+              <span>{{todo.createdAt}}</span>
+              <span v-if="todo.done">已完成</span>
+              <span v-else>未完成</span>
+              <button class="cancel" @click="removeTodo(todo)">X</button>  <!-- 删除按钮 -->
+            </div>
+          </li>
+        </ul>  
+      </section>
+
     </div>
     <script src="bundle.js"></script>
   </body>
